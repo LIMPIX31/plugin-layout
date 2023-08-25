@@ -3,6 +3,9 @@
 	"main": "src/index.ts",
 	"type": "module",
 	"version": "0.0.1",
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "yarn lib build esm",
 		"prepack": "yarn build",
