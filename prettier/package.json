@@ -2,14 +2,14 @@
 	"name": "prettier-plugin-layout",
 	"main": "src/index.ts",
 	"type": "module",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"scripts": {
 		"build": "yarn lib build esm",
 		"prepack": "yarn build",
 		"postpack": "rm -rf ./dist"
 	},
 	"dependencies": {
-		"import-layout": "workspace:^",
+		"import-layout": "workspace:~",
 		"prettier": "^3.0.2"
 	},
 	"devDependencies": {

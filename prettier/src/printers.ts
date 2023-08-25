@@ -24,6 +24,7 @@ function print(program: AstPath, options, prnt) {
 
 export const printers = {
 	'typescript-custom': {
+		...estree.printers.estree,
 		print,
 	},
 }

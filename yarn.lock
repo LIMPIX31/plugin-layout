@@ -222,22 +222,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/rule-tester@npm:^6.4.1":
-  version: 6.4.1
-  resolution: "@typescript-eslint/rule-tester@npm:6.4.1"
-  dependencies:
-    "@typescript-eslint/typescript-estree": "npm:6.4.1"
-    "@typescript-eslint/utils": "npm:6.4.1"
-    ajv: "npm:^6.10.0"
-    lodash.merge: "npm:4.6.2"
-    semver: "npm:^7.5.4"
-  peerDependencies:
-    "@eslint/eslintrc": ">=2"
-    eslint: ">=8"
-  checksum: 80b17f7e9db8256f906a846353338277f10c4331cb8984ca037e906e45ad41bde49cec9bd3039ecf66e00f29a355876f3a83fbcaff5a0c09360d4b4216757390
-  languageName: node
-  linkType: hard
-
 "@typescript-eslint/scope-manager@npm:6.4.1":
   version: 6.4.1
   resolution: "@typescript-eslint/scope-manager@npm:6.4.1"
@@ -335,7 +319,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^6.10.0, ajv@npm:^6.12.4":
+"ajv@npm:^6.12.4":
   version: 6.12.6
   resolution: "ajv@npm:6.12.6"
   dependencies:
@@ -932,20 +916,6 @@ __metadata:
   checksum: 41ad3d0c8036b36cd475685c1ad639157f403b16e8ac23c07f1dbe0226ccf8458f2805cbd5cc8e56856a5d8a356f3276e3139274d819476ccad80c41b9245502
   languageName: node
   linkType: hard
-
-"eslint-plugin-layout@workspace:eslint":
-  version: 0.0.0-use.local
-  resolution: "eslint-plugin-layout@workspace:eslint"
-  dependencies:
-    "@eslint/eslintrc": "npm:^2.1.2"
-    "@typescript-eslint/parser": "npm:^6.4.1"
-    "@typescript-eslint/rule-tester": "npm:^6.4.1"
-    "@typescript-eslint/utils": "npm:^6.4.1"
-    tslib: "npm:^2.6.2"
-  peerDependencies:
-    eslint: 8
-  languageName: unknown
-  linkType: soft
 
 "eslint-plugin-prettier@npm:^5.0.0":
   version: 5.0.0
@@ -1927,7 +1897,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.merge@npm:4.6.2, lodash.merge@npm:^4.6.2":
+"lodash.merge@npm:^4.6.2":
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
   checksum: 402fa16a1edd7538de5b5903a90228aa48eb5533986ba7fa26606a49db2572bf414ff73a2c9f5d5fd36b31c46a5d5c7e1527749c07cbcf965ccff5fbdf32c506
@@ -2278,7 +2248,6 @@ __metadata:
     "@lmpx-config/eslint": "npm:0.0.11"
     "@types/node": "npm:^20.5.6"
     eslint: "npm:^8.47.0"
-    eslint-plugin-simple-import-sort: "npm:^10.0.0"
     globby: "npm:^13.2.2"
     prettier: "npm:^3.0.2"
     typescript: "npm:^5.2.2"
