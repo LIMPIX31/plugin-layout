@@ -1,0 +1,27 @@
+{
+	"name": "import-layout",
+	"main": "dist/index.js",
+	"type": "module",
+	"version": "0.0.1",
+	"scripts": {
+		"build": "yarn lib build esm",
+		"prepack": "yarn build",
+		"postpack": "rm -rf ./dist"
+	},
+	"dependencies": {
+		"@typescript-eslint/utils": "^6.4.1"
+	},
+	"peerDependencies": {
+		"eslint": "8"
+	},
+	"peerDependenciesMeta": {
+		"eslint": {
+			"optional": true
+		}
+	},
+	"publishConfig": {
+		"access": "public",
+		"main": "dist/index.js",
+		"typings": "dist/index.d.ts"
+	}
+}

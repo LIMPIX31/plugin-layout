@@ -1,0 +1,28 @@
+{
+	"name": "eslint-plugin-layout",
+	"main": "src/index.ts",
+	"type": "module",
+	"version": "0.0.1",
+	"scripts": {
+		"build": "yarn lib build esm",
+		"prepack": "yarn build",
+		"postpack": "rm -rf ./dist"
+	},
+	"dependencies": {
+		"@eslint/eslintrc": "^2.1.2",
+		"@typescript-eslint/parser": "^6.4.1",
+		"@typescript-eslint/rule-tester": "^6.4.1",
+		"@typescript-eslint/utils": "^6.4.1"
+	},
+	"devDependencies": {
+		"tslib": "^2.6.2"
+	},
+	"peerDependencies": {
+		"eslint": "8"
+	},
+	"publishConfig": {
+		"access": "public",
+		"main": "dist/index.js",
+		"typings": "dist/index.d.ts"
+	}
+}
