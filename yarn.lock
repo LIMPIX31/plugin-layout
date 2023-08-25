@@ -1466,7 +1466,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"import-layout@workspace:^, import-layout@workspace:common":
+"import-layout@workspace:common, import-layout@workspace:~":
   version: 0.0.0-use.local
   resolution: "import-layout@workspace:common"
   dependencies:
@@ -2274,7 +2274,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "prettier-plugin-layout@workspace:prettier"
   dependencies:
-    import-layout: "workspace:^"
+    import-layout: "workspace:~"
     prettier: "npm:^3.0.2"
     tslib: "npm:^2.6.2"
   peerDependencies:
