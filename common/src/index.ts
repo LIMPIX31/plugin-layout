@@ -86,6 +86,10 @@ export function printImportStackFromDecl(meta: ImportsMeta, decl: any) {
 
 	const { hydratedImports, maxLength, hasTypeImport } = meta
 
+	if (!isFinite(maxLength)) {
+		return []
+	}
+
 	const key = decl.range[0]
 
 	const { isSideEffect, specifiers } = hydratedImports[key]
