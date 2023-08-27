@@ -1,5 +1,5 @@
 # Plugin Layout - Table imports prettier plugin
-##### Import sorting now included 🎉
+##### Import sorting partially supported via patched `eslint-plugin-simple-import-sort`
 
 ### Turn this
 ```ts
