@@ -107,13 +107,15 @@ function hasNewline(sourceCode: TSESLint.SourceCode, node) {
 	})
 
 	if (!nextToken) {
-		return false
+		return { has: false, cut: null }
 	}
 
-	const importCause = nextToken.value === 'import' && nextToken.loc.start.line - node.loc.start.line === 1
-	const commentCause = nextToken.type !== 'Line' && nextToken.type !== 'Block'
+	const importCause = nextToken.value === 'import' && nextToken.loc.start.line - node.loc.start.line > 1
+	const commentCause = nextToken.type === 'Line' || nextToken.type === 'Block'
 
-	return importCause && commentCause
+	const has = importCause || commentCause
+
+	return { has, cut: nextToken.value === 'import' ? nextToken.range[0] : null, comment: commentCause }
 }
 
 export const importRule = ESLintUtils.RuleCreator.withoutDocs<[Options], 'layout'>({
@@ -184,23 +186,14 @@ export const importRule = ESLintUtils.RuleCreator.withoutDocs<[Options], 'layout
 				}))
 
 				imports.forEach((node, idx) => {
+					const last = idx === imports.length - 1
+
 					const { at, code, insertNewLine } = printed[idx]
 
-					console.log(
-						at,
-						`${node.range[0]}-${node.range[1]}`,
-						code,
-						insertNewLine,
-						insertNewLine ? hasNewline(sourceCode, node) : true,
-					)
+					const { has, cut, comment } = hasNewline(sourceCode, node)
 
-					if (at === `${node.range[0]}-${node.range[1]}` && (insertNewLine ? !hasNewline(sourceCode, node) : true)) {
+					if (at === `${node.range[0]}-${node.range[1]}` && (insertNewLine && !last ? has : comment ? true : !has)) {
 						return
-					}
-
-					let newline = false
-					if (insertNewLine) {
-						newline = hasNewline(sourceCode, node)
 					}
 
 					context.report({
@@ -208,7 +201,7 @@ export const importRule = ESLintUtils.RuleCreator.withoutDocs<[Options], 'layout
 						messageId: 'layout',
 						loc: node.loc,
 						fix(fixer) {
-							return fixer.replaceText(node, `${code}${newline ? '\n' : ''}`)
+							return fixer.replaceTextRange([node.range[0], cut ?? node.range[1]], `${code}${!cut ? insertNewLine ? '\n\n' : '\n' : '\n'}`)
 						},
 					})
 				})
