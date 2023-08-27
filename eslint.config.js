@@ -1,11 +1,7 @@
 import configs from '@lmpx-config/eslint'
-import * as plugin from 'eslint-plugin-layout'
 
 const [config] = configs
 
-config.plugins['layout'] = plugin
-config.rules['layout/import'] = ['error']
-config.rules['simple-import-sort/imports'] = ['off']
 config.rules['prettier/prettier'] = [
 	'error',
 	{

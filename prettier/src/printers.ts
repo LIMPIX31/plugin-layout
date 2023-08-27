@@ -1,8 +1,8 @@
-import { getImportsMeta }           from 'import-layout'
-import { printImportStackFromDecl } from 'import-layout'
-
 import { AstPath }                  from 'prettier'
 import * as plugin                  from 'prettier/plugins/estree'
+
+import { getImportsMeta }           from 'import-layout'
+import { printImportStackFromDecl } from 'import-layout'
 
 const estree = plugin as any
 

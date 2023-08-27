@@ -36,9 +36,6 @@
       "import-layout": [
         "common"
       ],
-      "eslint-plugin-layout": [
-        "eslint"
-      ],
       "prettier-plugin-layout": [
         "prettier"
       ]

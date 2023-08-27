@@ -8,9 +8,8 @@ export interface ImportsMeta {
 		number,
 		{
 			decl: TSESTree.ImportDeclaration
-			isType: boolean
 			isSideEffect: boolean
-			specifiers: string[]
+			specifiers: { value: string, isType: boolean }[]
 		}
 	>
 }
@@ -20,7 +19,11 @@ const SPACED_TYPE = 'type'.length
 const SPACED_SPECIFIER = ' '.length
 
 export function extractSpecifiers(decl: TSESTree.ImportDeclaration) {
+	const rootIsType = decl.importKind === 'type'
+
 	return decl.specifiers.map((specifier) => {
+		const isType = rootIsType || specifier['importKind'] === 'type'
+
 		if (specifier.type === 'ImportSpecifier') {
 			const imported = specifier.imported.name
 			const alias = specifier.local.name
@@ -28,17 +31,17 @@ export function extractSpecifiers(decl: TSESTree.ImportDeclaration) {
 			const identical = imported === alias
 
 			if (identical) {
-				return `{ ${imported} }`
+				return { isType, value: `{ ${imported} }` }
 			}
 
-			return `{ ${imported} as ${alias} }`
+			return { isType, value: `{ ${imported} as ${alias} }` }
 		}
 
 		if (specifier.type === 'ImportNamespaceSpecifier') {
-			return `* as ${specifier.local.name}`
+			return { isType, value: `* as ${specifier.local.name}` }
 		}
 
-		return specifier.local.name
+		return { isType, value: specifier.local.name }
 	})
 }
 
@@ -52,7 +55,7 @@ export function isTypeImport({ importKind, specifiers }: TSESTree.ImportDeclarat
 export function getImportsMeta(ast: any): ImportsMeta {
 	const imports = ast.body.filter(({ type }) => type === 'ImportDeclaration') as TSESTree.ImportDeclaration[]
 	const specifiers = imports.map(extractSpecifiers)
-	const lengths = specifiers.flatMap((spec) => spec.map((v) => v.length))
+	const lengths = specifiers.flatMap((spec) => spec.map(({ value }) => value.length))
 
 	const maxLength = Math.max(...lengths)
 	const hasTypeImport = imports.some(isTypeImport)
@@ -62,7 +65,6 @@ export function getImportsMeta(ast: any): ImportsMeta {
 			decl.range[0],
 			{
 				decl,
-				isType: isTypeImport(decl),
 				isSideEffect: decl.specifiers.length === 0,
 				specifiers: specifiers[idx]!,
 			},
@@ -77,7 +79,7 @@ export function printImportStackFromDecl(meta: ImportsMeta, decl: any) {
 
 	const key = decl.range[0]
 
-	const { isType, isSideEffect, specifiers } = hydratedImports[key]
+	const { isSideEffect, specifiers } = hydratedImports[key]
 
 	const importStack = isSideEffect
 		? [
@@ -86,9 +88,9 @@ export function printImportStackFromDecl(meta: ImportsMeta, decl: any) {
 				}`,
 		  ]
 		: specifiers.map(
-				(spec) =>
-					`import ${hasTypeImport ? (isType ? 'type ' : '     ') : ''}${spec}${' '.repeat(
-						maxLength - spec.length,
+				({ value, isType }) =>
+					`import ${hasTypeImport ? (isType ? 'type ' : '     ') : ''}${value}${' '.repeat(
+						maxLength - value.length,
 					)} from ${decl.source.raw}`,
 		  )
 
