@@ -54,6 +54,11 @@ export function isTypeImport({ importKind, specifiers }: TSESTree.ImportDeclarat
 
 export function getImportsMeta(ast: any): ImportsMeta {
 	const imports = ast.body.filter(({ type }) => type === 'ImportDeclaration') as TSESTree.ImportDeclaration[]
+
+	if (imports.length === 0) {
+		return { imports: [], hydratedImports: [], maxLength: 0, hasTypeImport: false }
+	}
+
 	const specifiers = imports.map(extractSpecifiers)
 	const lengths = specifiers.flatMap((spec) => spec.map(({ value }) => value.length))
 
@@ -75,6 +80,10 @@ export function getImportsMeta(ast: any): ImportsMeta {
 }
 
 export function printImportStackFromDecl(meta: ImportsMeta, decl: any) {
+	if (meta.imports.length === 0) {
+		return []
+	}
+
 	const { hydratedImports, maxLength, hasTypeImport } = meta
 
 	const key = decl.range[0]
