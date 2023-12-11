@@ -96,7 +96,7 @@ export function printImportStackFromDecl(meta: ImportsMeta, decl: any) {
 
 	const importStack = isSideEffect
 		? [
-				`import ${' '.repeat(maxLength + SPACED_FROM + SPACED_SPECIFIER + (hasTypeImport ? SPACED_TYPE : 0))} ${
+				`import ${' '.repeat(maxLength + SPACED_FROM + SPACED_SPECIFIER + (hasTypeImport ? SPACED_TYPE + 1 : 0))} ${
 					decl.source.raw
 				}`,
 		  ]

@@ -7,15 +7,17 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "yarn lib build esm",
+		"build": "swc src -d dist",
 		"prepack": "yarn build",
 		"postpack": "rm -rf ./dist"
 	},
 	"dependencies": {
 		"import-layout": "workspace:~",
-		"prettier": "^3.0.2"
+		"prettier": "3.1.1"
 	},
 	"devDependencies": {
+		"@swc/cli": "0.1.63",
+		"@swc/core": "1.3.100",
 		"tslib": "^2.6.2"
 	},
 	"peerDependencies": {
