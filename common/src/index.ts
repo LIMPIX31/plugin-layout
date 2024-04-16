@@ -1,15 +1,17 @@
 import type { TSESTree } from '@typescript-eslint/utils'
+import      * as process from 'process'
 
 export interface ImportsMeta {
 	maxLength: number
 	hasTypeImport: boolean
+	hasSpecifiedImport: boolean
 	imports: TSESTree.ImportDeclaration[]
 	hydratedImports: Record<
 		number,
 		{
 			decl: TSESTree.ImportDeclaration
 			isSideEffect: boolean
-			specifiers: { value: string, isType: boolean }[]
+			specifiers: { value: string; isType: boolean }[]
 		}
 	>
 }
@@ -56,14 +58,15 @@ export function getImportsMeta(ast: any): ImportsMeta {
 	const imports = ast.body.filter(({ type }) => type === 'ImportDeclaration') as TSESTree.ImportDeclaration[]
 
 	if (imports.length === 0) {
-		return { imports: [], hydratedImports: [], maxLength: 0, hasTypeImport: false }
+		return { imports: [], hydratedImports: [], maxLength: 0, hasTypeImport: false, hasSpecifiedImport: false }
 	}
 
 	const specifiers = imports.map(extractSpecifiers)
 	const lengths = specifiers.flatMap((spec) => spec.map(({ value }) => value.length))
 
-	const maxLength = Math.max(...lengths)
+	const maxLength = lengths.length > 0 ? Math.max(...lengths) : 0
 	const hasTypeImport = imports.some(isTypeImport)
+	const hasSpecifiedImport = maxLength > 0
 
 	const hydratedImports = Object.fromEntries(
 		imports.map((decl, idx) => [
@@ -76,7 +79,7 @@ export function getImportsMeta(ast: any): ImportsMeta {
 		]),
 	)
 
-	return { imports, hydratedImports, maxLength, hasTypeImport }
+	return { imports, hydratedImports, maxLength, hasTypeImport, hasSpecifiedImport }
 }
 
 export function printImportStackFromDecl(meta: ImportsMeta, decl: any) {
@@ -84,11 +87,7 @@ export function printImportStackFromDecl(meta: ImportsMeta, decl: any) {
 		return []
 	}
 
-	const { hydratedImports, maxLength, hasTypeImport } = meta
-
-	if (!isFinite(maxLength)) {
-		return []
-	}
+	const { hydratedImports, maxLength, hasTypeImport, hasSpecifiedImport } = meta
 
 	const key = decl.range[0]
 
@@ -96,16 +95,16 @@ export function printImportStackFromDecl(meta: ImportsMeta, decl: any) {
 
 	const importStack = isSideEffect
 		? [
-				`import ${' '.repeat(maxLength + SPACED_FROM + SPACED_SPECIFIER + (hasTypeImport ? SPACED_TYPE + 1 : 0))} ${
-					decl.source.raw
-				}`,
-		  ]
+				`import ${' '.repeat(
+					maxLength + (hasSpecifiedImport ? SPACED_FROM + SPACED_SPECIFIER + 1 : 0) + (hasTypeImport ? SPACED_TYPE + 1 : 0),
+				)}${decl.source.raw}`,
+			]
 		: specifiers.map(
 				({ value, isType }) =>
 					`import ${hasTypeImport ? (isType ? 'type ' : '     ') : ''}${value}${' '.repeat(
 						maxLength - value.length,
 					)} from ${decl.source.raw}`,
-		  )
+			)
 
 	return importStack
 }
